@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/Cursor-React/static/css/main.9de57f11.css",
-    "main.js": "/Cursor-React/static/js/main.6c5d773b.js",
-    "index.html": "/Cursor-React/index.html",
-    "main.9de57f11.css.map": "/Cursor-React/static/css/main.9de57f11.css.map",
-    "main.6c5d773b.js.map": "/Cursor-React/static/js/main.6c5d773b.js.map"
+    "main.css": "./static/css/main.9de57f11.css",
+    "main.js": "./static/js/main.6c5d773b.js",
+    "index.html": "./index.html",
+    "main.9de57f11.css.map": "./static/css/main.9de57f11.css.map",
+    "main.6c5d773b.js.map": "./static/js/main.6c5d773b.js.map"
   },
   "entrypoints": [
     "static/css/main.9de57f11.css",
