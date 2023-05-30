@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './Contracts.css';
 
 const contacts = [
@@ -39,66 +39,97 @@ const contacts = [
   }
 ];
 
-function Contacts() {
-  const [contact, setContacts] = useState(contacts);
+function Contact({ firstName, lastName, phone, gender }) {
   return (
-
-      <div className='container'>
-        {contact.map((contact, index) => (
-          <div key={index} className='content'>
-            <p>{contact.firstName} {contact.lastName}</p>
-            <p>{contact.phone}</p>
-            <p>{contact.gender}</p>
-          </div>
-        ))}
-      </div>
-
+    <div className='contact'>
+      <p>{firstName} {lastName}</p>
+      <p>{phone}</p>
+      {gender && <p>{gender}</p>}
+    </div>
   );
 }
 
-function Contracts (){
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredData, setFilteredData] = useState([]);
+function Contacts() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterGender, setFilterGender] = useState('all');
   
-    const filterContacts = (contacts, searchTerm) => {
-      return contacts.filter((item) => {
-        const { firstName, lastName, phone } = item;
-        const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        
-        return (
-          firstName.toLowerCase().includes(lowerCaseSearchTerm) ||
-          lastName.toLowerCase().includes(lowerCaseSearchTerm) ||
-          phone.toLowerCase().includes(lowerCaseSearchTerm)
-        );
-      });
-    };
-  
-    const handleSearch = (event) => {
-      const value = event.target.value;
-      setSearchTerm(value);
-      setFilteredData(filterContacts(contacts, value));
-    };
-  
-    return (
-      <div className="contacts">
+  const filterContacts = (contacts, searchTerm, filterGender) => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    return contacts.filter(({ firstName, lastName, phone, gender }) => {
+      const lowerCaseGender = gender ? gender.toLowerCase() : '';
+      const isMatchingSearchTerm =
+        firstName.toLowerCase().includes(lowerCaseSearchTerm) ||
+        lastName.toLowerCase().includes(lowerCaseSearchTerm) ||
+        phone.toLowerCase().includes(lowerCaseSearchTerm);
+      const isMatchingGender = filterGender === 'all' || lowerCaseGender === filterGender;
+      return isMatchingSearchTerm && isMatchingGender;
+    });
+  };
+
+  const handleSearch = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+  };
+
+  const handleFilterGenderChange = (event) => {
+    const value = event.target.value;
+    setFilterGender(value);
+  };
+
+  const filteredContacts = filterContacts(contacts, searchTerm, filterGender);
+
+  return (
+    <div className="contacts">
+      <div className="filters">
         <input
           type="text"
           value={searchTerm}
           onChange={handleSearch}
           placeholder="Search..."
         />
-        <div className='container'>
-          {filteredData.map(({ firstName, lastName, phone, gender }, index) => (
-            <div key={index} className="content">
-              <p>{firstName} {lastName}</p>
-              <p>{phone}</p>
-              <p>{gender}</p>
-            </div>
-          ))}
+        <div className="gender-filter">
+          <label>
+            <input
+              type="radio"
+              value="all"
+              checked={filterGender === 'all'}
+              onChange={handleFilterGenderChange}
+            />
+            All
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="male"
+              checked={filterGender === 'male'}
+              onChange={handleFilterGenderChange}
+            />
+            Male
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="female"
+              checked={filterGender === 'female'}
+              onChange={handleFilterGenderChange}
+            />
+            Female
+          </label>
         </div>
       </div>
-    );
-  };
-  
+      <div className='container'>
+        {filteredContacts.map((contact, index) => (
+          <Contact
+            key={index}
+            firstName={contact.firstName}
+            lastName={contact.lastName}
+            phone={contact.phone}
+            gender={contact.gender}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-export default Contracts;
+export default Contacts;
